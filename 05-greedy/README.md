@@ -129,18 +129,57 @@ double fractionalKnapsack(vector<pair<int,int>>& items, int capacity) {
 
 Prove greedy is optimal by showing any swap to a non-greedy choice doesn't help.
 
+**The Exchange Argument Structure:**
+```
+1. Assume there's an "optimal" solution O that differs from greedy solution G
+2. Find a place where O makes a NON-greedy choice
+3. Show that SWAPPING to the greedy choice makes O at least as good
+4. Repeat until O becomes G → Therefore G is optimal
+```
+
 **Example: Job Scheduling with Deadlines**
 
-Given jobs with deadlines and penalties, minimize total penalty for late jobs.
+Given jobs with deadlines and processing times (each job takes 1 unit of time), minimize total penalty for late jobs.
 
-**Greedy:** Process jobs in order of deadline (earliest deadline first).
+**Greedy claim:** Process jobs in order of deadline (earliest deadline first).
 
-**Proof:** Suppose optimal solution processes job B before job A, but deadline(A) < deadline(B).
-- If both are on time: swapping doesn't change penalty
-- If A is late, B is on time: swapping might make A on time, B on time (better or same)
-- Both late: swapping doesn't change which are late
+**Proof using Exchange Argument:**
 
-Therefore, sorting by deadline is at least as good as any other order.
+Setup:
+- Job A has deadline 3, Job B has deadline 5
+- Suppose the "optimal" solution processes B first (at time 0), then A (at time 1)
+- Greedy would process A first (at time 0), then B (at time 1)
+
+We want to show: swapping B and A (to match greedy) doesn't make things worse.
+
+```
+BEFORE SWAP (non-greedy order):       AFTER SWAP (greedy order):
+Time:    0    1    2    3    4    5   Time:    0    1    2    3    4    5
+         |----B----|----A----|        |----A----|----B----|
+Job B: done at t=1, deadline=5 ✓ ON TIME   Job A: done at t=1, deadline=3 ✓ ON TIME
+Job A: done at t=2, deadline=3 ✓ ON TIME   Job B: done at t=2, deadline=5 ✓ ON TIME
+```
+
+**Analyze all cases for BEFORE SWAP (B before A, but deadline(A) < deadline(B)):**
+
+| Case | Before Swap | After Swap | Result |
+|------|-------------|------------|--------|
+| Both on time | A✓ B✓ | A✓ B✓ | Same (no penalty either way) |
+| A late, B on time | A✗ B✓ | A✓ B✓ or A✓ B✗ | Same or **Better** |
+| A on time, B late | A✓ B✗ | A✓ B✗ | Same |
+| Both late | A✗ B✗ | A✗ B✗ | Same |
+
+**Key insight for Case 2 (A late, B on time before swap):**
+- Before: B finishes at time T, A finishes at time T+1
+- A is late → T+1 > deadline(A)
+- B is on time → T ≤ deadline(B)
+
+- After swap: A finishes at time T, B finishes at time T+1
+- Since deadline(A) < deadline(B) and T ≤ deadline(B):
+  - If T ≤ deadline(A): A is now ON TIME! (Better)
+  - If T > deadline(A): A still late, but B might still be on time since deadline(B) > deadline(A)
+
+**Conclusion:** Swapping to greedy order NEVER makes things worse, and sometimes makes them BETTER. Therefore, the greedy solution (earliest deadline first) is optimal.
 
 ---
 
