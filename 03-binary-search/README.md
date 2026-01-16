@@ -306,6 +306,149 @@ long long countPairs(vector<int>& arr, int target) {
 
 ---
 
+---
+
+## 🧠 Pattern Recognition: When to Use Binary Search
+
+### Trigger Phrases (MEMORIZE THESE!)
+
+When you see these in a problem, **think binary search on answer:**
+
+| Trigger Phrase | Binary Search On... |
+|----------------|---------------------|
+| "**Minimize the maximum**..." | The maximum value |
+| "**Maximize the minimum**..." | The minimum value |
+| "**Find the smallest X such that**..." | X |
+| "**Find the largest X such that**..." | X |
+| "**Is it possible to achieve X?**" | X (if you can check efficiently) |
+| "**At least K**" / "**At most K**" | The threshold value |
+| "**Minimum time/cost to...**" | Time or cost |
+| "**K-th smallest/largest**" | The value itself |
+
+### Problem Characteristics
+
+**Binary search on answer is likely needed when:**
+
+1. ✅ You're asked to **optimize** (minimize/maximize) something
+2. ✅ The answer has a **monotonic property**:
+   - If X works, then X+1 also works (or vice versa)
+3. ✅ You can write a **check(X)** function efficiently
+4. ✅ The search space is **large** but **ordered**
+5. ✅ Direct computation is hard, but **verification is easy**
+
+### The Monotonicity Test
+
+Before using binary search, verify:
+
+```
+If check(mid) = TRUE:
+  → What about check(mid + 1)? Should be TRUE or FALSE consistently
+  → What about check(mid - 1)? Should be FALSE or TRUE consistently
+
+The function must be monotonic (all TRUE then all FALSE, or vice versa)
+```
+
+**Example:**
+- "Can we place K cows with minimum distance ≥ D?"
+- If TRUE for D=5, then TRUE for D=4, D=3, D=2... (easier constraints)
+- If FALSE for D=10, then FALSE for D=11, D=12... (harder constraints)
+- ✅ Monotonic! Binary search works.
+
+### Binary Search vs Other Techniques
+
+| Problem Type | Binary Search? | Why/Alternative |
+|--------------|----------------|-----------------|
+| Find element in sorted array | **Yes** | Classic binary search |
+| Minimize maximum partition sum | **Yes** | Binary search on max sum |
+| Find longest subarray with sum ≤ K | **No** | Use two pointers |
+| Minimize total cost | **Maybe** | Check if monotonic; might be DP |
+| Find K-th smallest element | **Yes** | Binary search on value, count ≤ X |
+| Shortest path | **No** | Use BFS/Dijkstra |
+
+### Pattern Recognition Exercises
+
+**Exercise 1:** Is it binary search on answer?
+
+| Problem | Binary Search? | What to search on? |
+|---------|----------------|-------------------|
+| "Minimize time to produce N items with K machines" | | |
+| "Find two numbers that sum to target" | | |
+| "Maximum minimum distance between K points" | | |
+| "Longest increasing subsequence" | | |
+| "Minimum radius to cover all points with one circle" | | |
+| "Count pairs with difference ≤ D" | | |
+
+<details>
+<summary>Answers</summary>
+
+1. **Yes** - Binary search on time T, check if can produce N items in time T
+2. **No** - Use hash set or two pointers
+3. **Yes** - Binary search on distance D, check if can place K points
+4. **No** - Use DP (though binary search helps optimize to O(N log N))
+5. **Yes** - Binary search on radius R, check if one circle covers all
+6. **Partially** - Can use binary search per element, or two pointers
+
+</details>
+
+**Exercise 2:** Define the check function
+
+For each problem, write what `check(mid)` should verify:
+
+1. "Divide array into K parts to minimize maximum part sum"
+   - check(S) = ________________________
+
+2. "Place N cows in stalls to maximize minimum distance"  
+   - check(D) = ________________________
+
+3. "Find minimum speed to travel distance in time T"
+   - check(V) = ________________________
+
+<details>
+<summary>Answers</summary>
+
+1. check(S) = "Can we divide array into ≤ K parts, each with sum ≤ S?"
+2. check(D) = "Can we place N cows such that minimum distance ≥ D?"
+3. check(V) = "Can we travel the required distance in time ≤ T at speed V?"
+
+</details>
+
+**Exercise 3:** Find the search bounds
+
+| Problem | lo | hi |
+|---------|----|----|
+| Minimize max partition sum | | |
+| Maximize min distance (stalls from 0 to 10^9) | | |
+| Find K-th smallest in array with values 1 to 10^6 | | |
+
+<details>
+<summary>Answers</summary>
+
+1. lo = max element (one element per partition), hi = total sum (one partition)
+2. lo = 0 (or 1), hi = 10^9 (max possible distance)
+3. lo = 1, hi = 10^6 (value range)
+
+</details>
+
+### Quick Decision Flowchart
+
+```
+Is the problem asking to OPTIMIZE something (min/max)?
+  │
+  ├─ NO → Probably not binary search on answer
+  │
+  └─ YES → Can you write check(X) efficiently?
+              │
+              ├─ NO → Try another approach
+              │
+              └─ YES → Is check(X) MONOTONIC?
+                         │
+                         ├─ NO → Not binary search
+                         │
+                         └─ YES → ✅ USE BINARY SEARCH!
+```
+
+---
+
 ## Key Takeaways
 
 1. ✅ **Binary search on answer** is the most important pattern for Silver
@@ -313,3 +456,4 @@ long long countPairs(vector<int>& arr, int target) {
 3. ✅ Use `lower_bound` / `upper_bound` for sorted array queries
 4. ✅ Be careful with **loop termination** conditions
 5. ✅ Practice identifying when a problem can be solved with binary search
+6. ✅ **Recognition:** "Minimize maximum" / "Maximize minimum" → Binary search!

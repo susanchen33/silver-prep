@@ -375,6 +375,151 @@ Each cell is visited at most once → O(N × M) for the entire grid.
 
 ---
 
+---
+
+## 🧠 Pattern Recognition: When to Use Flood Fill
+
+### Trigger Phrases
+
+When you see these in a problem, **think flood fill:**
+
+| Trigger Phrase | Why Flood Fill? |
+|----------------|-----------------|
+| "**Connected regions**" or "**components**" | Count/explore each region |
+| "**Grid** with obstacles" | Navigate around obstacles |
+| "**Reachable** cells/positions" | Explore what you can reach |
+| "**Fill** an area" | Classic flood fill |
+| "**Island** problems" | Each island is a component |
+| "**Shortest path** in grid" | BFS flood fill |
+| "**Adjacent** cells with same property" | Group adjacent cells |
+| "**Perimeter** of a region" | Count boundary edges during fill |
+
+### Problem Characteristics
+
+**Flood fill is likely needed when:**
+
+1. ✅ You have a **2D grid** input
+2. ✅ Need to find **connected components** (regions of same type)
+3. ✅ Need **shortest path** in an unweighted grid
+4. ✅ Need to **explore** from a starting point
+5. ✅ Problem mentions "**adjacent**" or "**neighboring**" cells
+6. ✅ Need to calculate **area**, **perimeter**, or **bounds** of regions
+
+### DFS vs BFS for Flood Fill
+
+| Use DFS when... | Use BFS when... |
+|-----------------|-----------------|
+| Just need to explore/count | Need **shortest path** |
+| Recursion depth is manageable | Grid is very large (avoid stack overflow) |
+| Order doesn't matter | Need to process level by level |
+| Simpler to implement | Need distance from source |
+
+### Flood Fill vs Other Techniques
+
+| Problem Type | Flood Fill? | Alternative? |
+|--------------|-------------|--------------|
+| Count connected regions in grid | **Yes** | - |
+| Shortest path in grid | **Yes (BFS)** | - |
+| Find if two cells are connected | **Yes** | Union-Find |
+| Path in weighted grid | **No** | Dijkstra |
+| All pairs shortest path | **No** | Floyd-Warshall |
+| Path that visits all cells | **No** | Backtracking/DP |
+
+### Common Variations
+
+| Variation | How to Handle |
+|-----------|---------------|
+| 4-directional | dx = {0,0,1,-1}, dy = {1,-1,0,0} |
+| 8-directional | Add diagonals: {-1,-1}, {-1,1}, {1,-1}, {1,1} |
+| With obstacles | Check if cell is blocked before visiting |
+| With state | visited[x][y][state] instead of visited[x][y] |
+| Multi-source | Add all sources to queue initially |
+
+### Pattern Recognition Exercises
+
+**Exercise 1:** Flood fill or not?
+
+| Problem | Flood Fill? | Why? |
+|---------|-------------|------|
+| "Count islands in a grid (1=land, 0=water)" | | |
+| "Find shortest path from A to B in maze" | | |
+| "Find minimum cost path in weighted grid" | | |
+| "Check if two cells are in same region" | | |
+| "Find area of largest connected region" | | |
+| "Count cells reachable from start within K steps" | | |
+
+<details>
+<summary>Answers</summary>
+
+1. **Yes** - Classic connected components, DFS/BFS each island
+2. **Yes** - BFS flood fill from A
+3. **No** - Use Dijkstra (weighted = not simple flood fill)
+4. **Yes** - Flood fill from one cell, check if other is visited
+5. **Yes** - Flood fill each component, track max size
+6. **Yes** - BFS from start, stop when distance > K
+
+</details>
+
+**Exercise 2:** DFS or BFS?
+
+| Problem | DFS or BFS? | Why? |
+|---------|-------------|------|
+| "Count number of rooms in a floor plan" | | |
+| "Find shortest path through a maze" | | |
+| "Calculate perimeter of each island" | | |
+| "Find all cells within distance 5 of start" | | |
+| "Check if a path exists between two points" | | |
+
+<details>
+<summary>Answers</summary>
+
+1. **Either** - Just counting, order doesn't matter (DFS simpler)
+2. **BFS** - Need shortest path
+3. **Either** - Just exploring, DFS is fine
+4. **BFS** - Need to track distances
+5. **Either** - Just reachability, DFS is simpler
+
+</details>
+
+**Exercise 3:** Design the flood fill
+
+For "Find the largest connected region of 'X' cells":
+
+1. What triggers a new flood fill? _____________
+2. What do you track during each fill? _____________
+3. How do you find the answer? _____________
+4. What's the time complexity? _____________
+
+<details>
+<summary>Answers</summary>
+
+1. Unvisited cell with value 'X'
+2. Size of current region (count cells visited)
+3. Track maximum size across all flood fills
+4. O(N × M) - each cell visited exactly once
+
+</details>
+
+### Quick Decision Flowchart
+
+```
+Is the input a 2D GRID?
+  │
+  ├─ NO → Probably not flood fill (maybe graph traversal)
+  │
+  └─ YES → What do you need?
+              │
+              ├─ Connected components → Flood fill (DFS or BFS)
+              │
+              ├─ Shortest path → BFS flood fill
+              │
+              ├─ Just reachability → DFS flood fill (simpler)
+              │
+              └─ Weighted paths → NOT flood fill (use Dijkstra)
+```
+
+---
+
 ## Key Takeaways
 
 1. ✅ Flood fill = DFS/BFS on a grid
@@ -382,3 +527,4 @@ Each cell is visited at most once → O(N × M) for the entire grid.
 3. ✅ Always check bounds and visited status
 4. ✅ Multi-source BFS starts from all sources simultaneously
 5. ✅ Track component properties (size, perimeter, bounding box) during traversal
+6. ✅ **Recognition:** Grid + connected regions + reachability → Think flood fill!

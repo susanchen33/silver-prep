@@ -324,6 +324,166 @@ Used in activity selection proof:
 
 ---
 
+---
+
+## 🧠 Pattern Recognition: When to Use Greedy
+
+### Trigger Phrases
+
+When you see these in a problem, **think greedy:**
+
+| Trigger Phrase | Greedy Strategy |
+|----------------|-----------------|
+| "**Maximum number of non-overlapping**..." | Sort by end time, take earliest |
+| "**Minimum number to cover all**..." | Sort by start, extend furthest |
+| "**Assign/match optimally**" | Sort both, pair greedily |
+| "**Scheduling** with constraints" | Sort by deadline/duration |
+| "**Minimum cost to connect all**" | MST (Kruskal/Prim) |
+| "**Optimal order to process**" | Sort by some criteria |
+| "**Can we do X? What's the best way?**" | Often greedy after sorting |
+
+### Problem Characteristics
+
+**Greedy is likely correct when:**
+
+1. ✅ Making local optimal choices doesn't block future optimal choices
+2. ✅ You can prove an **exchange argument** (swapping doesn't help)
+3. ✅ The problem has **optimal substructure**
+4. ✅ The constraint is about **non-overlapping** or **covering**
+5. ✅ Sorting by one attribute makes the rest straightforward
+
+### Greedy vs Other Techniques
+
+| Problem Type | Greedy? | Alternative? |
+|--------------|---------|--------------|
+| Max non-overlapping intervals | **Yes** | - |
+| 0/1 Knapsack | **No** | DP |
+| Fractional Knapsack | **Yes** | - |
+| Coin change (arbitrary coins) | **No** | DP |
+| Activity selection | **Yes** | - |
+| Longest increasing subsequence | **No** | DP (with binary search) |
+| Minimum spanning tree | **Yes** | - |
+| Shortest path | **Sometimes** | Dijkstra (greedy), but BFS for unweighted |
+
+### The Exchange Argument Test
+
+To verify greedy works:
+
+```
+1. Assume optimal solution O that differs from greedy solution G
+2. Find first point where O makes a different choice than G
+3. Show that swapping O's choice to G's choice doesn't make O worse
+4. Therefore, G is also optimal
+```
+
+**Example - Activity Selection:**
+- Greedy: Pick activity with earliest end time
+- Exchange: If optimal picks activity B (later end) over A (earlier end)
+- Swapping B with A still works (A ends earlier, doesn't conflict more)
+- Therefore greedy is optimal ✅
+
+### Common Greedy Patterns
+
+| Pattern | Sort By | Then Do |
+|---------|---------|---------|
+| Activity selection | End time | Take if no conflict |
+| Interval covering | Start time | Extend furthest |
+| Job scheduling | Deadline | Process earliest deadline first |
+| Task assignment | Value/weight ratio | Take best ratio first |
+| Huffman coding | Frequency | Merge two smallest |
+| MST | Edge weight | Add if no cycle |
+
+### Pattern Recognition Exercises
+
+**Exercise 1:** Greedy or not?
+
+| Problem | Greedy? | Why? |
+|---------|---------|------|
+| "Max meetings in one room" | | |
+| "Minimum coins for amount (1,5,10,25 cents)" | | |
+| "Minimum coins for amount (1,3,4 cents), amount=6" | | |
+| "Pair students to minimize max pair height difference" | | |
+| "Longest common subsequence" | | |
+| "Fill knapsack with items (can take fractions)" | | |
+
+<details>
+<summary>Answers</summary>
+
+1. **Yes** - Activity selection, sort by end time
+2. **Yes** - Standard coins work with greedy (special case)
+3. **No** - Greedy gives 4+1+1=3 coins, optimal is 3+3=2 coins
+4. **Yes** - Sort heights, pair adjacent
+5. **No** - Use DP
+6. **Yes** - Fractional knapsack, sort by value/weight
+
+</details>
+
+**Exercise 2:** What to sort by?
+
+| Problem | Sort By |
+|---------|---------|
+| "Max non-overlapping intervals" | |
+| "Minimum intervals to cover [0, T]" | |
+| "Assign tasks to workers, minimize max completion time" | |
+| "Process jobs to minimize total late penalty" | |
+
+<details>
+<summary>Answers</summary>
+
+1. **End time** (ascending) - take earliest ending
+2. **Start time** (ascending) - extend furthest from current position
+3. **Task duration** (descending) or **worker speed** - often pair sorted lists
+4. **Deadline** (ascending) - earliest deadline first
+
+</details>
+
+**Exercise 3:** Prove or disprove greedy
+
+"Given N tasks with deadlines and penalties, minimize total penalty."
+
+Proposed greedy: Sort by penalty (highest first), schedule if possible.
+
+Is this correct? _____________
+
+<details>
+<summary>Answer</summary>
+
+**No!** Counter-example:
+- Task A: deadline 1, penalty 10
+- Task B: deadline 2, penalty 100
+- Task C: deadline 2, penalty 50
+
+Greedy (by penalty): B at time 1, can't fit A (deadline passed), C at time 2
+→ Penalty = 10
+
+Optimal: A at time 1, B at time 2
+→ Penalty = 50
+
+Correct approach: Sort by deadline, or use more sophisticated scheduling
+
+</details>
+
+### Quick Decision Flowchart
+
+```
+Does making a LOCAL choice affect FUTURE choices badly?
+  │
+  ├─ YES → Probably not greedy (try DP)
+  │
+  └─ NO or UNSURE → Can you prove exchange argument?
+                      │
+                      ├─ YES → Greedy works! ✅
+                      │
+                      └─ NO → Try to find counterexample
+                               │
+                               ├─ Found one → Not greedy
+                               │
+                               └─ Can't find one → Might be greedy,
+                                                   implement and test
+```
+
+---
+
 ## Key Takeaways
 
 1. ✅ Greedy makes locally optimal choices
@@ -331,3 +491,4 @@ Used in activity selection proof:
 3. ✅ **Stay ahead argument:** prove greedy is always competitive
 4. ✅ Common patterns: activity selection, MST, Huffman
 5. ✅ Always verify greedy works before implementing!
+6. ✅ **Recognition:** Non-overlapping, covering, scheduling → Think greedy!

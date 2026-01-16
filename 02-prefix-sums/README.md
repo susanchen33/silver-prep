@@ -284,6 +284,105 @@ int subarraysDivByK(vector<int>& arr, int k) {
 
 ---
 
+---
+
+## 🧠 Pattern Recognition: When to Use Prefix Sums
+
+### Trigger Phrases
+
+When you see these in a problem, **think prefix sums:**
+
+| Trigger Phrase | Why Prefix Sums? |
+|----------------|------------------|
+| "Sum of elements from L to R" | Classic range sum query |
+| "Count of X in range [L, R]" | Prefix count array |
+| "Multiple range queries" | Precompute to answer in O(1) |
+| "Subarray sum equals K" | Prefix sum + hash map |
+| "Subarray sum divisible by K" | Prefix sum + modular arithmetic |
+| "2D rectangle sum" | 2D prefix sums |
+| "Add V to range [L, R]" | Difference array |
+
+### Problem Characteristics
+
+**Prefix sums are likely needed when:**
+
+1. ✅ **Multiple queries** on ranges (sum, count, etc.)
+2. ✅ The problem asks about **subarrays** with a sum property
+3. ✅ You need **cumulative** information
+4. ✅ Grid problems asking for **rectangle sums**
+5. ✅ You need to **update ranges** efficiently (difference array)
+
+### Prefix Sums vs Other Techniques
+
+| Problem Type | Use Prefix Sums? | Alternative? |
+|--------------|------------------|--------------|
+| Single range sum query | Maybe (O(N) is fine) | Direct sum |
+| Many range sum queries | **Yes** | - |
+| Longest subarray with sum ≤ K | No | **Two pointers** |
+| Subarray with exact sum K | **Yes** (+ hash map) | - |
+| Maximum subarray sum | Maybe | **Kadane's algorithm** |
+| Range updates, point queries | **Yes** (difference array) | - |
+
+### Pattern Recognition Exercises
+
+**Exercise 1:** Prefix sums or not?
+
+| Problem | Prefix Sums? | Why? |
+|---------|--------------|------|
+| "Answer Q queries for sum in range [L, R]" | | |
+| "Find longest subarray with sum ≤ K" | | |
+| "Count subarrays with sum = 0" | | |
+| "Find two elements that sum to target" | | |
+| "Count pairs (i, j) where prefix[j] - prefix[i] = K" | | |
+
+<details>
+<summary>Answers</summary>
+
+1. **Yes** - Multiple range queries, precompute prefix sums
+2. **No** - Use two pointers (variable window)
+3. **Yes** - Prefix sums + hash map (count prefix[j] - prefix[i] = 0)
+4. **No** - Use hash set or two pointers
+5. **Yes** - This IS the prefix sum technique for subarray sum = K
+
+</details>
+
+**Exercise 2:** What type of prefix sum?
+
+| Problem | Type |
+|---------|------|
+| "Sum of 2D rectangle in grid" | |
+| "Number of 'A's in string from index L to R" | |
+| "Add 5 to all elements from index 3 to 7" | |
+| "Count subarrays with sum divisible by 7" | |
+
+<details>
+<summary>Answers</summary>
+
+1. **2D prefix sums** with inclusion-exclusion
+2. **1D prefix count** (count of 'A' up to each index)
+3. **Difference array** (range update)
+4. **Prefix sums + modular arithmetic** (count by remainder)
+
+</details>
+
+**Exercise 3:** Identify the key insight
+
+"Given array, count subarrays with sum divisible by K"
+
+- What prefix sum property is used? _____________
+- What data structure helps? _____________
+
+<details>
+<summary>Answer</summary>
+
+- If `prefix[j] % K == prefix[i] % K`, then `sum(i+1, j)` is divisible by K
+- Use an **array of size K** to count prefixes by their remainder
+- Answer: sum of C(count[r], 2) for each remainder r
+
+</details>
+
+---
+
 ## Key Takeaways
 
 1. ✅ Prefix sums turn O(N) range queries into O(1)
@@ -291,3 +390,4 @@ int subarraysDivByK(vector<int>& arr, int k) {
 3. ✅ Learn difference arrays for range updates
 4. ✅ Combine with hash maps for "subarray sum = K" problems
 5. ✅ Watch out for integer overflow and off-by-one errors
+6. ✅ **Recognition:** Range queries, subarray sums, cumulative → Think prefix sums

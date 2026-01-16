@@ -230,6 +230,87 @@ for (auto& [time, delta] : events) {
 
 ---
 
+---
+
+## 🧠 Pattern Recognition: When to Use Sorting
+
+### Trigger Phrases
+
+When you see these in a problem, **think sorting:**
+
+| Trigger Phrase | Why Sorting? |
+|----------------|--------------|
+| "Process events in order" | Sort events by time/position |
+| "Intervals" or "ranges" | Sort by start or end point |
+| "Closest pair" or "nearest" | Sort then check adjacent |
+| "K-th largest/smallest" | Sort then index |
+| "Median" | Sort then take middle |
+| "Coordinate compression needed" | Sort + unique + binary search |
+| "Sweep line" | Sort events, process in order |
+
+### Problem Characteristics
+
+**Sorting is likely needed when:**
+
+1. ✅ The problem involves **intervals** (start, end times)
+2. ✅ You need to process things in a **specific order**
+3. ✅ The answer depends on **relative ordering**, not absolute values
+4. ✅ You see "greedy" hints (often sort first, then greedy)
+5. ✅ Large value ranges but small N (coordinate compression)
+
+### What to Sort By?
+
+| Problem Type | Sort By |
+|--------------|---------|
+| Maximum non-overlapping intervals | **End time** (earliest end first) |
+| Minimum intervals to cover range | **Start time** |
+| Assign tasks to minimize max | **Task size** (often descending) |
+| Pair items optimally | **Both arrays**, then pair |
+| Events (start/end) | **Time**, with tie-breaker for type |
+
+### Pattern Recognition Exercises
+
+**Exercise 1:** For each problem, decide what to sort by:
+
+1. "Select maximum number of non-overlapping meetings"
+   - Sort by: _____________
+   
+2. "Find the minimum number of platforms needed at a train station"
+   - Sort by: _____________
+   
+3. "Pair N workers with N tasks to minimize maximum completion time"
+   - Sort by: _____________
+
+<details>
+<summary>Answers</summary>
+
+1. Sort by **end time** (activity selection)
+2. Sort **arrivals and departures** separately, or as events
+3. Sort **both arrays** (workers and tasks), pair smallest with smallest
+
+</details>
+
+**Exercise 2:** Identify if sorting is needed:
+
+| Problem | Sorting Needed? | Why? |
+|---------|-----------------|------|
+| "Find sum of elements in range [L, R]" | | |
+| "Find K-th smallest element in array" | | |
+| "Count connected components in graph" | | |
+| "Find maximum gap between consecutive elements after sorting" | | |
+
+<details>
+<summary>Answers</summary>
+
+1. **No** - Use prefix sums
+2. **Yes** - Sort then take index K-1
+3. **No** - Use DFS/BFS
+4. **Yes** - Must sort first, then scan
+
+</details>
+
+---
+
 ## Key Takeaways
 
 1. ✅ Master `std::sort()` with custom comparators
@@ -237,3 +318,4 @@ for (auto& [time, delta] : events) {
 3. ✅ Practice coordinate compression
 4. ✅ Understand when to sort by different criteria
 5. ✅ Always verify comparator is a strict weak ordering
+6. ✅ **Recognition:** Intervals, events, relative order → Think sorting

@@ -352,6 +352,165 @@ All patterns are O(N) because each element is visited at most twice (once by eac
 
 ---
 
+---
+
+## 🧠 Pattern Recognition: When to Use Two Pointers
+
+### Trigger Phrases
+
+When you see these in a problem, **think two pointers:**
+
+| Trigger Phrase | Two Pointer Type |
+|----------------|------------------|
+| "**Two elements that sum to**..." | Opposite direction |
+| "**Longest subarray with**..." | Same direction (sliding window) |
+| "**Shortest subarray with**..." | Same direction |
+| "**Count subarrays/pairs with**..." | Same direction or opposite |
+| "**Consecutive elements**" | Same direction |
+| "**Window of size K**" | Fixed sliding window |
+| "**At most K distinct**" | Variable sliding window |
+| "**Merge two sorted**..." | Same direction (two arrays) |
+
+### Problem Characteristics
+
+**Two pointers is likely needed when:**
+
+1. ✅ Working with a **sorted array** and need pairs
+2. ✅ Looking for **subarrays** with a constraint (sum, distinct elements)
+3. ✅ The constraint is **monotonic** (adding elements only makes it larger/worse)
+4. ✅ You're currently thinking O(N²) but need O(N)
+5. ✅ The problem involves **consecutive** elements
+
+### Same Direction vs Opposite Direction
+
+| When to use... | Characteristics | Example |
+|----------------|-----------------|---------|
+| **Opposite direction** | Sorted array, find pairs | Two Sum in sorted array |
+| **Same direction** | Subarrays, windows | Longest subarray with sum ≤ K |
+| **Fixed window** | Exactly K consecutive | Max sum of K elements |
+| **Variable window** | At most/at least K | Longest with ≤ K distinct |
+
+### Two Pointers vs Other Techniques
+
+| Problem Type | Two Pointers? | Alternative? |
+|--------------|---------------|--------------|
+| Two numbers sum to K (sorted) | **Yes** | Hash set |
+| Two numbers sum to K (unsorted) | Maybe | **Hash set** (O(N)) |
+| Subarray sum = K | No | **Prefix sum + hash map** |
+| Longest subarray sum ≤ K (positive) | **Yes** | - |
+| Longest subarray sum ≤ K (with negatives) | No | Need different approach |
+| Count pairs with difference ≤ D | **Yes** | - |
+| K-th smallest pair sum | No | **Binary search** + counting |
+
+### The "Can I Shrink?" Test
+
+Two pointers (same direction) works when:
+```
+If current window [left, right] violates constraint:
+  → Shrinking (left++) should help fix it
+  → Expanding should only make it worse or same
+
+This is the monotonicity required for two pointers!
+```
+
+**Example - "Longest subarray with sum ≤ K":**
+- If sum > K, removing left element (left++) decreases sum ✅
+- Adding right element (right++) increases sum ✅
+- Monotonic! Two pointers works.
+
+**Counter-example - "Subarray with sum = K" (with negatives):**
+- If sum > K, removing left element might increase or decrease sum ❌
+- Not monotonic! Use prefix sums instead.
+
+### Pattern Recognition Exercises
+
+**Exercise 1:** Two pointers or not?
+
+| Problem | Two Pointers? | Why? |
+|---------|---------------|------|
+| "Find pair with sum = K in sorted array" | | |
+| "Longest substring without repeating chars" | | |
+| "Count subarrays with sum = K" | | |
+| "Merge two sorted arrays" | | |
+| "Maximum product of two elements" | | |
+| "Longest subarray with at most 2 distinct values" | | |
+
+<details>
+<summary>Answers</summary>
+
+1. **Yes** - Opposite direction, adjust based on sum vs K
+2. **Yes** - Sliding window with hash set for seen chars
+3. **No** - Use prefix sums + hash map (sum could be negative)
+4. **Yes** - Two pointers, one per array
+5. **No** - Sort and take two largest (or two smallest if negatives)
+6. **Yes** - Sliding window with frequency count
+
+</details>
+
+**Exercise 2:** Which type of two pointers?
+
+| Problem | Type |
+|---------|------|
+| "Two elements with difference = K (sorted)" | |
+| "Minimum window containing all characters" | |
+| "Container with most water" | |
+| "Remove duplicates from sorted array" | |
+| "Count pairs with sum ≤ K" | |
+
+<details>
+<summary>Answers</summary>
+
+1. **Same direction** - Both pointers move right
+2. **Same direction** - Sliding window (variable size)
+3. **Opposite direction** - Start at ends, move inward
+4. **Same direction** - Slow/fast pointer
+5. **Opposite direction** - For each left, find rightmost valid right
+
+</details>
+
+**Exercise 3:** Design the window
+
+For "Longest subarray with at most K zeros":
+
+1. What makes the window **invalid**? _____________
+2. When do we **shrink** (left++)? _____________
+3. When do we **expand** (right++)? _____________
+4. What do we **track**? _____________
+
+<details>
+<summary>Answers</summary>
+
+1. More than K zeros in window
+2. When zero count > K
+3. Always (after shrinking if needed)
+4. Count of zeros in current window
+
+</details>
+
+### Quick Decision Flowchart
+
+```
+Is the input sorted (or should it be)?
+  │
+  ├─ YES, looking for PAIRS → Opposite direction two pointers
+  │
+  └─ Looking for SUBARRAYS/WINDOWS?
+       │
+       ├─ Fixed size window? → Fixed sliding window
+       │
+       └─ Variable size?
+            │
+            ├─ Constraint MONOTONIC when window changes?
+            │     │
+            │     ├─ YES → Variable sliding window ✅
+            │     │
+            │     └─ NO → Use prefix sums or other technique
+            │
+            └─ Unsure? → Check if shrinking always helps
+```
+
+---
+
 ## Key Takeaways
 
 1. ✅ Two pointers converts O(N²) to O(N) for many problems
@@ -359,3 +518,4 @@ All patterns are O(N) because each element is visited at most twice (once by eac
 3. ✅ **Same direction:** subarrays, sliding windows
 4. ✅ "At most K" - "at most K-1" = "exactly K" trick
 5. ✅ Each element is processed at most twice → O(N)
+6. ✅ **Recognition:** Pairs in sorted array, or subarrays with constraint → Think two pointers!
